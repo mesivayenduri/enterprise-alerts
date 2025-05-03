@@ -1,7 +1,7 @@
 apiVersion: "monitoring.coreos.com/v1"
 kind: ServiceMonitor
 metadata:
-  name: haproxy-servicemonitor-dev
+  name: example-servicemonitor-dev
   namespace: development
   labels:
     release: prometheus
@@ -11,8 +11,8 @@ spec:
       - development
   selector:
     matchLabels:
-      app: haproxy-service # SHOULD MATCH WITH HAPROXY-SERVICE
+      app: example-service # SHOULD MATCH WITH TARGET SERVICE
   endpoints:
-  - port: "metrics"
+  - port: "metrics" # SHOULD BE SPECIFIED IN TARGET SERVICE
     path: "/metrics"
     interval: 15s
