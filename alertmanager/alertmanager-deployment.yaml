@@ -1,0 +1,19 @@
+apiVersion: monitoring.coreos.com/v1
+kind: Alertmanager
+metadata:
+  name: alertmanager-development
+  namespace: development
+spec:
+  configSecret: alertmanager-development
+  serviceAccountName: dev-sa
+  replicas: 1
+  securityContext:
+    runAsNonRoot: true
+    runAsUser: 1000
+  volumeMounts:
+    - name: alertmanager-config
+      mountPath: "/etc/alertmanager/configMap"
+  volumes:
+    - name: alertmanager-config
+      secret:
+        secretName: alertmanager-development

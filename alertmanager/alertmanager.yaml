@@ -1,0 +1,19 @@
+global:
+  resolve_timeout: 2m
+
+route:
+  group_by: ['alertname']
+  receiver: 'teams-and-mail'
+receivers:
+  - name: 'teams-and-mail'
+    webhook_configs:
+      - url: 'http://prometheus-msteams:2000/alertmanagerteams'
+        send_resolved: true
+    email_configs:
+      - to: 'xxxxxx@gmail.com'
+        send_resolved: false
+        from: 'xxxxx@gmail.com'
+        smarthost: 'smtp.gmail.com:587'
+        require_tls: false
+        headers:
+          subject: "Alert ({{ .Status }}): {{ .CommonLabels.severity }} {{.CommonAnnotations.message }} ({{ .CommonLabels.Alertname }})"
