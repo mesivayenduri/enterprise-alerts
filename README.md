@@ -19,7 +19,16 @@ curl -sL https://github.com/prometheus-operator/prometheus-operator/releases/dow
 The above command will install required Custom Resource Definitions (CRDs) and it will pick the target application services with labels.
 
 ## Project Setup
-Apply all the kubernetes files with kubectl command, and run script.sh files in directories with those files instead of applying the files directly.
+1. Install Helm after prometheus operator
+2. Clone this repo
+3. Run scripts in alertmanager and msteams folders.
+4. Run Helm installation command
+```
+git clone <url>
+cd enterprise-alerts
+sh alertmanager/scripts.sh && sh msteams/scripts.sh
+helm install prometheus ./ --values=./dev/values.yaml
+```
 
 ## Working
 
