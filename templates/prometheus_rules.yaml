@@ -1,10 +1,10 @@
 apiVersion: monitoring.coreos.com/v1
 kind: PrometheusRule
 metadata:
-  name: myapp-alerts
-  namespace: development
+  name: {{ .Values.prometheus.rule }}
+  namespace: {{ .Values.metadata.namespace }}
   labels:
-    role: alert-rules
+    role: {{ .Values.prometheus.rulesRole }}
 spec:
   groups:
     - name: instance.rules
@@ -15,8 +15,8 @@ spec:
           labels:
             severity: critical
           annotations:
-            summary: "Instance {{ $labels.instance }} is down"
-            description: "No response from {{ $labels.instance }} for 2 minutes"
+            summary: "Instance {{`{{ $labels.instance }}`}} is down"
+            description: "No response from {{`{{ $labels.instance }}`}} for 2 minutes"
     - name: backendErrors
       rules:
         - alert: HighBackendErrors
@@ -25,8 +25,8 @@ spec:
           labels:
             severity: critical
           annotations:
-            summary: "High backend errors on {{ $labels.proxy }}"
-            description: "Gettting High backend errors on {{ $labels.proxy }}" 
+            summary: "High backend errors on {{`{{ $labels.proxy }}`}}"
+            description: "Gettting High backend errors on {{`{{ $labels.proxy }}`}}" 
     #- name: test.rules
     #  rules:
     #  - alert: HighMemoryUsage

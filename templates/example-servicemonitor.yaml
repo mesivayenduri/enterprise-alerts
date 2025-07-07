@@ -1,14 +1,14 @@
 apiVersion: "monitoring.coreos.com/v1"
 kind: ServiceMonitor
 metadata:
-  name: example-servicemonitor-dev
-  namespace: development
+  name: example-servicemonitor-{{ .Values.metadata.env }}
+  namespace: {{ .Values.metadata.namespace }}
   labels:
-    release: prometheus
+    release: {{ .Release.name }}
 spec:
   namespaceSelector:
     matchNames:
-      - development
+      - {{ .Values.metadata.namespace }}
   selector:
     matchLabels:
       app: example-service # SHOULD MATCH WITH TARGET SERVICE

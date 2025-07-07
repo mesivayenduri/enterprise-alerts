@@ -1,0 +1,21 @@
+apiVersion: monitoring.coreos.com/v1
+kind: Alertmanager
+metadata:
+  name: {{ .Values.alertmanager.name }}
+  namespace: {{ .Values.metadata.namespace }}
+spec:
+  configSecret: {{ .Values.alertmanager.name }}
+  serviceAccountName: {{ .Values.metadata.serviceAccount }}
+  replicas: {{ .Values.alertmanager.replicas }}
+  securityContext:
+    runAsNonRoot: true
+    runAsUser: 1000
+  resources:
+    {{- toYaml .Values.alertmanager.resources | nindent 4 }}
+  volumeMounts:
+    - name: {{ .Values.alertmanager.config }}
+      mountPath: {{ .Values.alertmanager.configPath }}
+  volumes:
+    - name: {{ .Values.alertmanager.config }}
+      secret:
+        secretName: {{ .Values.alertmanager.name }}

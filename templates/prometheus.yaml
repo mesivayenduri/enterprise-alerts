@@ -1,0 +1,26 @@
+apiVersion: monitoring.coreos.com/v1
+kind: Prometheus
+metadata:
+  name: {{ .Values.metadata.app }}-{{ .Values.metadata.env }}
+  namespace: {{ .Values.metadata.namespace }}
+  labels:
+    release: {{ .Release.name }}
+spec:
+  serviceAccountName: {{ .Values.metadata.serviceAccount }}
+  serviceMonitorSelector:
+    matchLabels:
+      release: {{ .Release.name }}
+  serviceMonitorNamespaceSelector:
+    matchLabels:
+      kubernetes.io/metadata.name: {{ .Values.metadata.namespace }}
+  ruleSelector:
+    matchLabels:
+      role: {{ .Values.prometheus.rulesRole }}
+  alerting:
+    alertmanagers:
+      - namespace: {{ .Values.metadata.namespace }}
+        name: {{ .Values.alertmanager.service }}
+        port: {{ .Values.alertmanager.port}}
+  resources:
+    {{- toYaml .Values.prometheus.resources | nindent 4 }}
+  replicas: {{ .Values.prometheus.replicas }}

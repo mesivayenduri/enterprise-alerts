@@ -1,0 +1,50 @@
+metadata:
+  app: prometheus
+  namespace: development
+  env: dev
+  serviceAccount: dev-sa
+  appManagedBy: Helm
+  releaseName: prometheus
+  releaseNamespace: development
+
+prometheus:
+  replicas: 1
+  rule: myapp-alerts
+  rulesRole: alert-rules
+  resources:
+    limits:
+      cpu: 500m
+      memory: 512Mi
+    requests:
+      cpu: 50m
+      memory: 100Mi
+
+alertmanager:
+  name: alertmanager-development
+  config: alertmanage-config
+  configPath: /etc/alertmanager/configMap
+  service: alertmanager-operated
+  replicas: 1
+  port: 9093
+  resources:
+    limits:
+      cpu: 200m
+      memory: 512Mi
+    requests:
+      cpu: 10m
+      memory: 100Mi
+
+msteams:
+  name: prometheus-msteams
+  replicas: 1
+  resources:
+    limits:
+      cpu: 100m
+      memory: 512Mi
+    requests:
+      cpu: 10m
+      memory: 100Mi
+  config: prometheus-msteams-config
+  configPath: /etc/config
+  template: prometheus-msteams-card-template
+  templatePath: /etc/template 

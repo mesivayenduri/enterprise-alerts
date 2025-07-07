@@ -1,0 +1,45 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Values.msteams.name }}
+  namespace: {{ .Values.metadata.namespace }}
+  labels:
+    app: {{ .Values.msteams.name }}
+spec:
+  replicas: {{ .Values.msteams.replicas }}
+  selector:
+    matchLabels:
+      app: {{ .Values.msteams.name }}
+  template:
+    metadata:
+      labels:
+        app: {{ .Values.msteams.name }}
+    spec:
+      volumes:
+        - name: config-volume
+          configMap:
+            name: {{ .Values.msteams.config }}
+        - name: card-template-volume
+          configMap:
+            name: {{ .Values.msteams.template }}
+      containers:
+        - name: {{ .Values.msteams.name }}
+          image: quay.io/prometheusmsteams/prometheus-msteams:v1.5.2
+          imagePullPolicy: IfNotPresent
+          securityContext:
+            runAsUser: 1000
+            runAsNonRoot: true
+          ports:
+            - containerPort: 2000
+              name: http
+              protocol: TCP
+          resources:
+            {{- toYaml .Values.msteams.resources | nindent 12 }}
+          args:
+            - -config-file=/etc/config/connectors.yaml
+            - -template-file=/etc/template/card.tmpl
+          volumeMounts:
+            - name: config-volume
+              mountPath: {{ .Values.msteams.configPath }}
+            - name: card-template-volume
+              mountPath: {{ .Values.msteams.templatePath }}

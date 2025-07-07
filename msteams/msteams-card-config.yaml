@@ -5,3 +5,4 @@ metadata:
   namespace: development
 binaryData:
   card.tmpl: |-
+{{ .Files.Get "./card.tmpl" | b64enc | indent 4 }}
