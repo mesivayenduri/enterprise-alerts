@@ -27,7 +27,7 @@ The above command will install required Custom Resource Definitions (CRDs) and i
 git clone <url>
 cd enterprise-alerts
 sh alertmanager/scripts.sh && sh msteams/scripts.sh
-helm install prometheus ./ --values=./dev/values.yaml
+helm install prometheus ./ --values=./dev-values.yaml
 ```
 
 ## Working
